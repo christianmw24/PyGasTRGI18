@@ -78,14 +78,14 @@ cu88 = {305: 0.4, 385: 0.6, 455: 0.8, 515: 1, 570: 1.2, 615: 1.4, 665: 1.6, 705:
         1040: 3.5, 1140: 4, 1290: 5, 1420: 6, 1540: 7, 1650: 8, 1750: 9, 1900: 10, 2090: 12, 2270: 14, 2430: 16,
         2590: 18, 2740: 20}
 # Druckverlust Stahlrohr
-stm15 = {3: 0.8, 4: 1, 5: 1.2, 6: 1.6, 7: 2, 8: 2.5, 9: 3, 10: 4, 12: 5, 13: 6, 14: 7, 15: 8, 16: 9, 17: 10, 19: 12, 21: 14, 22: 16, 24: 18, 25: 20}
-stm20 = {6: 0.4, 8: 0.6, 9: 0.8, 11: 1, 12: 1.2, 13: 1.4, 14: 1.6, 15: 1.8, 16: 2, 18: 2.5, 20: 3, 22: 3.5, 24: 4, 28: 5, 30: 6, 33: 7, 35: 8, 37: 9, 41: 10, 45: 12, 48: 14, 52: 16, 55: 18, 58: 20}
-stm25 = {12: 0.4, 15: 0.6, 18: 0.8, 21: 1, 23: 1.2, 25: 1.4, 27: 1.6, 29: 1.8, 31: 2, 35: 2.5, 39: 3, 42: 3.5, 46: 4, 52: 5, 57: 6, 62: 7, 67: 8, 71: 9, 77: 10, 84: 12, 91: 14, 97: 16, 104: 18, 109: 20}
-stm32 = {27: 0.4, 34: 0.6, 40: 0.8, 46: 1, 50: 1.2, 54: 1.4, 58: 1.6, 62: 1.8, 68: 2, 77: 2.5, 84: 3, 91: 3.5, 100: 4, 112: 5, 123: 6, 133: 7, 143: 8, 152: 9, 164: 10, 180: 12, 194: 14, 205: 16, 220: 18, 230: 20}
-stm40 = {41: 0.4, 52: 0.6, 61: 0.8, 70: 1, 76: 1.2, 83: 1.4, 89: 1.6, 95: 1.8, 103: 2, 116: 2.5, 128: 3, 138: 3.5, 151: 4, 170: 5, 187: 6, 200: 7, 215: 8, 225: 9, 245: 10, 270: 12, 290: 14, 310: 16, 330: 18, 350: 20}
-stm50 = {80: 0.4, 100: 0.6, 118: 0.8, 134: 1, 147: 1.2, 159: 1.4, 171: 1.6, 182: 1.8, 197: 2, 220: 2.5, 240: 3, 260: 3.5, 285: 4, 325: 5, 355: 6, 380: 7, 410: 8, 435: 9, 470: 10, 515: 12, 555: 14, 590: 16, 630: 18, 660: 20}
-stm65 = {164: 0.4, 205: 0.6, 240: 0.8, 270: 1, 300: 1.2, 320: 1.4, 345: 1.6, 365: 1.8, 400: 2, 450: 2.5, 490: 3, 530: 3.5, 580: 4, 655: 5, 715: 6, 775: 7, 825: 8, 875: 9, 950: 10, 1030: 12, 1110: 14, 1190: 16, 1260: 18, 1330: 20}
-stm80 = {250: 0.4, 315: 0.6, 370: 0.8, 420: 1, 460: 1.2, 500: 1.4, 535: 1.6, 570: 1.8, 615: 2, 695: 2.5, 760: 3, 820: 3.5, 895: 4, 1010: 5, 1100: 6, 1190: 7, 1270: 8, 1350: 9, 1460: 10, 1590: 12, 1720: 14, 1830: 16, 1940: 18, 2050: 20}
+stm15 = {}
+stm20 = {}
+stm25 = {}
+stm32 = {}
+stm40 = {}
+stm50 = {}
+stm65 = {}
+stm80 = {}
 # Gerätetyp
 gbf = 'Gasbrennwert'
 kwh = 'Kombiwasserheizer'
@@ -116,220 +116,12 @@ g25 = 'G25'
 g40 = 'G40'
 g65 = 'G65'
 # Funktionen
-# prüfung gs==gs in reihe
-# auswahl gs gerät
-# auswahl gs gesamt
-# druckverlust gaszähler
-# summen/spitzenbelastung
-# gesamtberechnungslänge abhängig vom rohrtyp
-# vorauswahlst vorauswahl dimension für berechnungslänge
-# gesamtlst berechnungslänge bei stahlrohr nach vorauswahl
 # vorauswahl cu vorauswahl dimension für berechnungslänge
 # gesamtlcu berechnungslänge bei cu rohr nach vorauswahl
 # hoehdp druckänderung durch höhe
 # getdparm druckverlust armatur
 # checkqnb prüfung nennwärmebelastung
-
-
-def gsserial(gstyp, gsdp, gsauswahl):
-    gsauswahlx = str(gsauswahl)
-    gstypx = str(gstyp)
-    gsdpx = int(gsdp)
-    if gstypx == gsauswahlx:
-        gstypx = 'kein GS, da gleiche größe vorher im Fließweg'
-        gsdpx= 0
-    else:
-        gstypx = gstyp
-        gsdpx = gsdp
-    return gstypx, gsdpx
-
-
-def getgsgeraet(qnb):
-    selectqnb = int(qnb)
-    gstext = ''
-    if selectqnb <= 17:
-        typgs = 'GS 2,5 K'
-        gstab = gs25
-    elif 17 < selectqnb < 28:
-        typgs = 'GS 4 K'
-        gstab = gs4
-    elif 27 < selectqnb < 42:
-        typgs = 'GS 6 K'
-        gstab = gs6
-    elif 41 < selectqnb < 69:
-        typgs = 'GS 10 K'
-        gstab = gs10
-    elif 68 < selectqnb < 111:
-        typgs = 'GS 16 K'
-        gstab = gs16
-    else:
-        typgs = 'Qnb > 110 kW, kein GS erforderlich '
-        gstab = gs0
-    if selectqnb in gstab:
-        gsdp = gstab[selectqnb]
-    else:
-        while selectqnb not in gstab:
-            selectqnb = selectqnb + 1
-        gsdp = gstab[selectqnb]
-    return typgs, gsdp, gstext
-
-
-def getgs(qnbspitze, qnbgesamt, posgs):
-    selectspitze = int(qnbspitze)
-    selectqnb = int(qnbgesamt)
-    posgs = int(posgs)
-    gstext = ''
-    if selectqnb <= 21:
-        typgs = 'GS 2,5 K'
-        gstab = gs25
-    elif 21 < selectqnb < 35:
-        typgs = 'GS 4 K'
-        gstab = gs4
-    elif 34 < selectqnb < 52:
-        typgs = 'GS 6 K'
-        gstab = gs6
-    elif 51 < selectqnb < 87:
-        typgs = 'GS 10 K'
-        gstab = gs10
-    elif 86 < selectqnb < 139:
-        typgs = 'GS 16 K'
-        gstab = gs16
-    else:
-        typgs = 'Qsb > 138 kW, kein GS erforderlich '
-        gstab = gs0
-    if selectspitze in gstab:
-        gsdp = gstab[selectspitze]
-    else:
-        while selectspitze not in gstab:
-            selectspitze = selectspitze + 1
-        gsdp = gstab[selectspitze]
-    if posgs == 1:
-        gsdp = 0
-        gstext = ' (vor Druckregler)'
-    return typgs, gsdp, gstext
-
-
-def getdpgbz(gbz, qnbgesamt, qnbsb):
-    qnbsb = int(qnbsb)
-    selectqnb = int(qnbgesamt)
-    gbzdimension = True
-    if gbz == 'G2,5' and selectqnb < 35:
-        gbztab = gbz2
-    elif gbz == 'G4' and selectqnb < 52:
-        gbztab = gbz4
-    elif gbz == 'G6' and selectqnb < 69:
-        gbztab = gbz6
-    elif gbz == 'G10' and selectqnb < 115:
-        gbztab = gbz10
-    elif gbz == 'G16' and selectqnb < 166:
-        gbztab = gbz16
-    elif gbz == 'G25' and selectqnb < 259:
-        gbztab = gbz25
-    elif gbz == 'G40' and selectqnb < 413:
-        gbztab = gbz40
-    elif gbz == 'G65' and selectqnb < 671:
-        gbztab = gbz65
-    else:
-        gbzdimension = False
-        gbztab = 0
-    if gbzdimension:
-        if qnbsb in gbztab:
-            gbzdp = gbztab[qnbsb]
-        else:
-            while qnbsb not in gbztab:
-                qnbsb = qnbsb + 1
-            gbzdp = gbztab[qnbsb]
-        gbztext = 'Größe Gaszähler ' + gbz + ' OK '
-        gbzcheck = True
-        return gbzdp, gbztext, gbzcheck
-    else:
-        gbztext = 'Gaszähler zu klein '
-        gbzdp = 300
-        gbzcheck = False
-        return gbzdp, gbztext, gbzcheck
-
-
-# Q=Spitzenbelastung qnbspitze, Qnbmax=maximal angeschlossene Belastung, Qsb/qnbgesamt= Summe der angeschl Nennbelastung
-# Q = Qnbmax + 0,5 x ( Qsb - Qnbmax) = 0,5 x ( Qsb + Qnbmax)
-def qnbsumme(qnb1, qnb1check, qnb2, qnb2check):
-    if qnb1check == True and qnb2check == True:
-        qnbgesamt = int(qnb1) + int(qnb2)
-        if qnb1 >= qnb2:
-            qnbmax = qnb1
-        else:
-            qnbmax = qnb2
-        qnbdiff = qnbgesamt - qnbmax
-        qnbspitze = float(qnbmax) + 0.5 * float(qnbdiff)
-        qnbspitze = round(qnbspitze)
-    else:
-        qnbgesamt = 0
-        qnbmax = 0
-        qnbspitze = 0
-    return qnbgesamt, qnbmax, qnbspitze
-
-
-def gesamtlbytyp(rohrtyp, rohrl, rohrb, qnb):
-    if rohrtyp == 1:
-        vorauswahl = vorauswahlcu(qnb)
-        gesamtl, textl = gesamtlcu(rohrl, rohrb, vorauswahl)
-    elif rohrtyp == 2:
-        vorauswahl = vorauswahlst(qnb)
-        gesamtl, textl = gesamtlst(rohrl, rohrb, vorauswahl)
-    else:
-        gesamtl = 0
-        textl = 'Ungültige Eingabe Rohrlänge/Bögen! '
-    return gesamtl, textl
-
-
-def vorauswahlst(qnb):
-    qnb = int(qnb)
-    if qnb < 18:
-        rohrtab = stm15
-    elif 17 < qnb < 42:
-        rohrtab = stm20
-    elif 41 < qnb < 78:
-        rohrtab = stm25
-    elif 77 < qnb < 165:
-        rohrtab = stm32
-    elif 164 < qnb < 246:
-        rohrtab = stm40
-    elif 245 < qnb < 471:
-        rohrtab = stm50
-    elif 470 < qnb < 951:
-        rohrtab = stm65
-    else:
-        rohrtab = stm80
-    return rohrtab
-
-
-def gesamtlst(rohrlaenge, boegen, rohrvorauswahl):
-    laengelocal = locale.atof(rohrlaenge)
-    laenge = float(laengelocal)
-    boegen = int(boegen)
-    rohrdn = rohrvorauswahl
-    if rohrdn == stm15 or rohrdn == stm20 or rohrdn == stm25:
-        formteilzuschlagw = 0.3
-        formteilzuschlagt = 0.7
-    elif rohrdn == stm32:
-        formteilzuschlagw = 0.5
-        formteilzuschlagt = 1.0
-    elif rohrdn == stm40:
-        formteilzuschlagw = 0.7
-        formteilzuschlagt = 1.5
-    elif rohrdn == stm50:
-        formteilzuschlagw = 1
-        formteilzuschlagt = 2.0
-    elif rohrdn == stm65:
-        formteilzuschlagw = 1.2
-        formteilzuschlagt = 2.5
-    else:
-        formteilzuschlagw = 1.5
-        formteilzuschlagt = 3.0
-    gesamtlaenge1 = laenge + boegen * formteilzuschlagw + formteilzuschlagt
-    gesamtlaengef = float(gesamtlaenge1)
-    gesamtlaenge = round(gesamtlaengef)
-    textlaenge = 'Berechnungslänge (ink. T-St.): ' + str(gesamtlaenge) + ' m'
-    return gesamtlaenge, textlaenge
+testfuck = '.'
 
 
 def vorauswahlcu(qnb):
@@ -491,59 +283,25 @@ def button_check():
     summaryR3 = Label(fenster, text=armtext2)
     summaryL3.grid(row=32, column=0)
     summaryR3.grid(row=32, column=2)
-    qnbgesamt, qnbmax, qnbspitze = qnbsumme(qnb1, qnbcheck1, qnb2, qnbcheck2)
-    gsauswahl, gsdp, gstext = getgs(qnbspitze, qnbgesamt, selectposgs.get())
-    gstyp1, gsdp1, gstext1 = getgsgeraet(qnb1)
-    gstyp2, gsdp2, gstext2 = getgsgeraet(qnb2)
-    gstyp1, gsdp1 = gsserial(gstyp1, gsdp1, gsauswahl)
-    gstyp2, gsdp2 = gsserial(gstyp2, gsdp2, gsauswahl)
-    summaryL3a = Label(fenster, text='Typ GS Gerät 1: ' + str(gstyp1))
-    summaryR3a = Label(fenster, text='Typ GS Gerät 2: ' + str(gstyp2))
-    summaryL3b = Label(fenster, text='Druckverlust GS: ' + str(gsdp1) + ' Pa')
-    summaryR3b = Label(fenster, text='Druckverlust GS: ' + str(gsdp2) + ' Pa')
-    summaryL3a.grid(row=33, column=0)
-    summaryR3a.grid(row=33, column=2)
-    summaryL3b.grid(row=34, column=0)
-    summaryR3b.grid(row=34, column=2)
     hoehedp1, hoehetext1 = hoehedp(usergeraet1h.get())
     hoehedp2, hoehetext2 = hoehedp(usergeraet2h.get())
     summaryL4 = Label(fenster, text=hoehetext1)
     summaryR4 = Label(fenster, text=hoehetext2)
-    summaryL4.grid(row=37, column=0)
-    summaryR4.grid(row=37, column=2)
+    summaryL4.grid(row=33, column=0)
+    summaryR4.grid(row=33, column=2)
     rohrvorauswahl1typ = selectgeraet1rt.get()
     rohrvorauswahl2typ = selectgeraet2rt.get()
-    rohrl1 = usergeraet1rl.get()
-    rohrl2 = usergeraet2rl.get()
-    rohrbo1 = usergeraet1bo.get()
-    rohrbo2 = usergeraet2bo.get()
-    rohrlaenge1, rohrtext1 = gesamtlbytyp(rohrvorauswahl1typ, rohrl1, rohrbo1, qnb1)
-    rohrlaenge2, rohrtext2 = gesamtlbytyp(rohrvorauswahl2typ, rohrl2, rohrbo2, qnb2)
+    rohrvorauswahl1 = vorauswahlcu(qnb1)
+    rohrvorauswahl2 = vorauswahlcu(qnb2)
+    rohrlaenge1, rohrtext1 = gesamtlcu(usergeraet1rl.get(), usergeraet1bo.get(), rohrvorauswahl1)
+    rohrlaenge2, rohrtext2 = gesamtlcu(usergeraet2rl.get(), usergeraet2bo.get(), rohrvorauswahl2)
     summaryL5 = Label(fenster, text=rohrtext1)
     summaryR5 = Label(fenster, text=rohrtext2)
-    summaryL5.grid(row=38, column=0)
-    summaryR5.grid(row=38, column=2)
-    #qnbgesamt, qnbmax, qnbspitze = qnbsumme(qnb1, qnbcheck1, qnb2, qnbcheck2)
-    summaryL6 = Label(fenster, text='Summe Nennbelastungen: ' + str(qnbgesamt) + ' kW')
-    summaryM6 = Label(fenster, text='größte Nennbelastung: ' + str(qnbmax) + ' kW')
-    summaryR6 = Label(fenster, text='Spitzenbelastung: ' + str(qnbspitze) + ' kW')
-    summaryL6.grid(row=42, column=0)
-    summaryM6.grid(row=42, column=1)
-    summaryR6.grid(row=42, column=2)
-    gaszaehlerdp, gaszahlertext, gaszaehlercheck = getdpgbz(selectgz.get(), qnbgesamt, qnbspitze)
-    summaryL7 = Label(fenster, text=gaszahlertext)
-    summaryL8 = Label(fenster, text='Druckverlust Gaszähler: ' + str(gaszaehlerdp) + ' Pa')
-    summaryL7.grid(row=45, column=0)
-    summaryL8.grid(row=45, column=1)
-    #gsauswahl, gsdp, gstext = getgs(qnbspitze, qnbgesamt, selectposgs.get())
-    summaryR7 = Label(fenster, text='Typ Strömungswächter: ' + gsauswahl)
-    summaryR8 = Label(fenster, text='Druckverlust: ' + str(gsdp) + ' Pa' + str(gstext))
-    summaryR7.grid(row=45, column=2)
-    summaryR8.grid(row=45, column=3)
-
-    # weiter in line 46
-    # weiter mit rohrvorauswahl, aufpassen mit qnb/sb/summe/spitze
-
+    summaryL5.grid(row=34, column=0)
+    summaryR5.grid(row=34, column=2)
+    # weiter mit rohrtyp cu/stahl unterscheidung
+#usergeraet1rtcu = Radiobutton(fenster, text='Kupferrohr', variable=selectgeraet1rt, value=1)
+#usergeraet1rtsr = Radiobutton(fenster, text='Stahlrohr', variable=selectgeraet1rt, value=2)
 
 # Fenster
 # Fenstertitel
@@ -629,20 +387,16 @@ lgeraet1rl.grid(row=10, column=0)
 lgeraet2rl = Label(fenster, text='Rohrlänge in m ab T-Stück: ')
 lgeraet2rl.grid(row=10, column=2)
 usergeraet1rl = Entry(fenster, bd=5, width=10)
-usergeraet1rl.insert(0, 1)
 usergeraet1rl.grid(row=10, column=1)
 usergeraet2rl = Entry(fenster, bd=5, width=10)
-usergeraet2rl.insert(0, 1)
 usergeraet2rl.grid(row=10, column=3)
 lgeraet1bo = Label(fenster, text='Anzahl Winkel')
 lgeraet1bo.grid(row=11, column=0)
 lgeraet2bo = Label(fenster, text='Anzahl Winkel')
 lgeraet2bo.grid(row=11, column=2)
 usergeraet1bo = Entry(fenster, bd=5, width=10)
-usergeraet1bo.insert(0, 1)
 usergeraet1bo.grid(row=11, column=1)
 usergeraet2bo = Entry(fenster, bd=5, width=10)
-usergeraet2bo.insert(0, 1)
 usergeraet2bo.grid(row=11, column=3)
 # Trennlinie
 lblank = Label(fenster,
@@ -713,18 +467,6 @@ lblank4.grid(row=28, column=2, columnspan=2)
 # Checkbutton, Zusammenfassung
 check_button = Button(fenster, text='Eingaben prüfen', command=button_check)
 check_button.grid(row=29, column=1)
-lblank5 = Label(fenster,
-                text='------------------------------------------------------------------------------------------------')
-lblank5.grid(row=40, column=0, columnspan=2)
-lblank6 = Label(fenster,
-                text='------------------------------------------------------------------------------------------------')
-lblank6.grid(row=40, column=2, columnspan=2)
-lblank7 = Label(fenster,
-                text='------------------------------------------------------------------------------------------------')
-lblank7.grid(row=44, column=0, columnspan=2)
-lblank8 = Label(fenster,
-                text='------------------------------------------------------------------------------------------------')
-lblank8.grid(row=44, column=2, columnspan=2)
 
 # Mainloop
 mainloop()
